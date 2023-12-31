@@ -1,6 +1,5 @@
 package com.workshop.pokemon.services.impl;
 
-import com.workshop.pokemon.dto.PokemonDto;
 import com.workshop.pokemon.exceptions.PokemonNotFoundException;
 import com.workshop.pokemon.models.Pokemon;
 import com.workshop.pokemon.repositories.PokemonRepository;
@@ -50,12 +49,21 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> createPokemon(PokemonDto pokemonDto) {
-        return null;
+    public ResponseEntity<ApiResponse> createPokemon(Pokemon pokemon) {
+        try {
+            Pokemon createdPokemon = pokemonRepository.save(pokemon);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new ApiResponse(true, "Pokemon created successfully", createdPokemon));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Error creating pokemon", null));
+        }
     }
 
     @Override
-    public ResponseEntity<ApiResponse> updatePokemon(Long pokemonId, PokemonDto pokemonDto) {
+    public ResponseEntity<ApiResponse> updatePokemon(Long pokemonId, Pokemon pokemon) {
         return null;
     }
 
