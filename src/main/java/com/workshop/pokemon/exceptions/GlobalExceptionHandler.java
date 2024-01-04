@@ -13,11 +13,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PokemonNotFoundException.class)
     public ResponseEntity<ErrorObject> handlePokemonNotFoundException(PokemonNotFoundException ex, WebRequest request) {
-        ErrorObject errorObject = new ErrorObject();
-
-        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(new Date());
+        ErrorObject errorObject = new ErrorObject(HttpStatus.NOT_FOUND.value(), ex.getMessage(), new Date());
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)

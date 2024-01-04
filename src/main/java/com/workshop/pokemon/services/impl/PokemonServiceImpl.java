@@ -44,7 +44,7 @@ public class PokemonServiceImpl implements PokemonService {
         } catch (PokemonNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse(false, "Error retrieving todo with id: " + pokemonId, null));
+                    .body(new ApiResponse(false, "Error retrieving pokemon with id: " + pokemonId, null));
         }
     }
 
@@ -63,8 +63,21 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> updatePokemon(Long pokemonId, Pokemon pokemon) {
-        return null;
+    public ResponseEntity<ApiResponse> updatePokemon(Long pokemonId, Pokemon pokemonDetails) {
+        try {
+            Pokemon pokemon = pokemonRepository.findById(pokemonId)
+                    .orElseThrow(() -> new PokemonNotFoundException("Pokemon not found with id: " + pokemonId));
+
+            pokemon.setName(pokemonDetails.getName());
+            pokemon.setType(pokemonDetails.getType());
+
+            Pokemon updatedPokemon = pokemonRepository.save(pokemon);
+            return ResponseEntity.ok(new ApiResponse(true, "Pokemon updated successfully", updatedPokemon));
+        } catch (PokemonNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Error updating pokemon with id: " + pokemonId, null));
+        }
     }
 
     @Override

@@ -23,13 +23,18 @@ public class PokemonController {
         return pokemonService.getAllPokemon();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getPokemonById(@PathVariable("id") Long pokemonId) {
+    @GetMapping("/{pokemonId}")
+    public ResponseEntity<ApiResponse> getPokemonById(@PathVariable Long pokemonId) {
         return pokemonService.getPokemonById(pokemonId);
     }
 
     @PostMapping()
     public ResponseEntity<ApiResponse> createPokemon(@RequestBody Pokemon pokemon) {
         return pokemonService.createPokemon(pokemon);
+    }
+
+    @PutMapping("/{pokemonId}")
+    public ResponseEntity<ApiResponse> updatePokemon(@PathVariable Long pokemonId, @RequestBody Pokemon pokemonDetails) {
+        return pokemonService.updatePokemon(pokemonId, pokemonDetails);
     }
 }
