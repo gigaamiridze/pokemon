@@ -82,6 +82,16 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public ResponseEntity<ApiResponse> deletePokemonById(Long pokemonId) {
-        return null;
+        try {
+            Pokemon pokemon = pokemonRepository.findById(pokemonId)
+                    .orElseThrow(() -> new PokemonNotFoundException("Pokemon not found with id: " + pokemonId));
+            pokemonRepository.delete(pokemon);
+
+            return ResponseEntity.ok(new ApiResponse(true, "Pokemon deleted successfully", pokemon));
+        } catch (PokemonNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Error deleting pokemon with id: " + pokemonId, null));
+        }
     }
 }

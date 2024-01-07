@@ -37,4 +37,9 @@ public class PokemonController {
     public ResponseEntity<ApiResponse> updatePokemon(@PathVariable Long pokemonId, @RequestBody Pokemon pokemonDetails) {
         return pokemonService.updatePokemon(pokemonId, pokemonDetails);
     }
+
+    @DeleteMapping("/{pokemonId}")
+    public ResponseEntity<ApiResponse> deletePokemonById(@PathVariable Long pokemonId) {
+        return pokemonService.deletePokemonById(pokemonId);
+    }
 }
