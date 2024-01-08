@@ -19,8 +19,11 @@ public class PokemonController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllPokemon() {
-        return pokemonService.getAllPokemon();
+    public ResponseEntity<ApiResponse> getAllPokemon(
+            @RequestParam(value = "pageNo", defaultValue = "", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "", required = false) int pageSize
+    ) {
+        return pokemonService.getAllPokemon(pageNo, pageSize);
     }
 
     @GetMapping("/{pokemonId}")

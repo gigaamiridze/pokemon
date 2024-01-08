@@ -5,12 +5,14 @@ import com.workshop.pokemon.models.Pokemon;
 import com.workshop.pokemon.repositories.PokemonRepository;
 import com.workshop.pokemon.services.PokemonService;
 import com.workshop.pokemon.utils.ApiResponse;
+import com.workshop.pokemon.utils.PokemonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PokemonServiceImpl implements PokemonService {
@@ -23,10 +25,21 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getAllPokemon() {
+    public ResponseEntity<ApiResponse> getAllPokemon(int pageNo, int pageSize) {
         try {
-            List<Pokemon> pokemons = pokemonRepository.findAll();
-            return ResponseEntity.ok(new ApiResponse(true, "Pokemons retrieved successfully", pokemons));
+            Pageable pageable = PageRequest.of(pageNo, pageSize);
+            Page<Pokemon> pokemons = pokemonRepository.findAll(pageable);
+
+            PokemonResponse pokemonResponse = new PokemonResponse();
+
+            pokemonResponse.setContent(pokemons.getContent());
+            pokemonResponse.setPageNo(pokemons.getNumber());
+            pokemonResponse.setPageSize(pokemons.getSize());
+            pokemonResponse.setTotalPages(pokemons.getTotalPages());
+            pokemonResponse.setTotalElements(pokemons.getTotalElements());
+            pokemonResponse.setLast(pokemons.isLast());
+
+            return ResponseEntity.ok(new ApiResponse(true, "Pokemons retrieved successfully", pokemonResponse));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
