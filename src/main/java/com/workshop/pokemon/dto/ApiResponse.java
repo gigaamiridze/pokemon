@@ -1,4 +1,4 @@
-package com.workshop.pokemon.utils;
+package com.workshop.pokemon.dto;
 
 public class ApiResponse {
     private boolean success;

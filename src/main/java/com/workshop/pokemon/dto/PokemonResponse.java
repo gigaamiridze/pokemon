@@ -1,11 +1,9 @@
-package com.workshop.pokemon.utils;
-
-import com.workshop.pokemon.models.Pokemon;
+package com.workshop.pokemon.dto;
 
 import java.util.List;
 
 public class PokemonResponse {
-    private List<Pokemon> content;
+    private List<PokemonDto> content;
     private int pageNo;
     private int pageSize;
     private int totalPages;
@@ -14,7 +12,7 @@ public class PokemonResponse {
 
     public PokemonResponse() {}
 
-    public PokemonResponse(List<Pokemon> content, int pageNo, int pageSize, int totalPages, int totalElements, boolean isLast) {
+    public PokemonResponse(List<PokemonDto> content, int pageNo, int pageSize, int totalPages, int totalElements, boolean isLast) {
         this.content = content;
         this.pageNo = pageNo;
         this.pageSize = pageSize;
@@ -23,11 +21,11 @@ public class PokemonResponse {
         this.isLast = isLast;
     }
 
-    public List<Pokemon> getContent() {
+    public List<PokemonDto> getContent() {
         return content;
     }
 
-    public void setContent(List<Pokemon> content) {
+    public void setContent(List<PokemonDto> content) {
         this.content = content;
     }
 

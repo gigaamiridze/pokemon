@@ -1,11 +1,12 @@
 package com.workshop.pokemon.services.impl;
 
+import com.workshop.pokemon.dto.PokemonDto;
 import com.workshop.pokemon.exceptions.PokemonNotFoundException;
 import com.workshop.pokemon.models.Pokemon;
 import com.workshop.pokemon.repositories.PokemonRepository;
 import com.workshop.pokemon.services.PokemonService;
-import com.workshop.pokemon.utils.ApiResponse;
-import com.workshop.pokemon.utils.PokemonResponse;
+import com.workshop.pokemon.dto.ApiResponse;
+import com.workshop.pokemon.dto.PokemonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PokemonServiceImpl implements PokemonService {
@@ -29,10 +33,12 @@ public class PokemonServiceImpl implements PokemonService {
         try {
             Pageable pageable = PageRequest.of(pageNo, pageSize);
             Page<Pokemon> pokemons = pokemonRepository.findAll(pageable);
+            List<Pokemon> listOfPokemon = pokemons.getContent();
+            List<PokemonDto> content = listOfPokemon.stream().map(p -> mapToDto(p)).collect(Collectors.toList());
 
             PokemonResponse pokemonResponse = new PokemonResponse();
 
-            pokemonResponse.setContent(pokemons.getContent());
+            pokemonResponse.setContent(content);
             pokemonResponse.setPageNo(pokemons.getNumber());
             pokemonResponse.setPageSize(pokemons.getSize());
             pokemonResponse.setTotalPages(pokemons.getTotalPages());
@@ -62,8 +68,9 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> createPokemon(Pokemon pokemon) {
+    public ResponseEntity<ApiResponse> createPokemon(PokemonDto pokemonDto) {
         try {
+            Pokemon pokemon = new Pokemon(pokemonDto.getName(), pokemonDto.getType());
             Pokemon createdPokemon = pokemonRepository.save(pokemon);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -76,7 +83,7 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> updatePokemon(Long pokemonId, Pokemon pokemonDetails) {
+    public ResponseEntity<ApiResponse> updatePokemon(Long pokemonId, PokemonDto pokemonDetails) {
         try {
             Pokemon pokemon = pokemonRepository.findById(pokemonId)
                     .orElseThrow(() -> new PokemonNotFoundException("Pokemon not found with id: " + pokemonId));
@@ -106,5 +113,15 @@ public class PokemonServiceImpl implements PokemonService {
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse(false, "Error deleting pokemon with id: " + pokemonId, null));
         }
+    }
+
+    private PokemonDto mapToDto(Pokemon pokemon) {
+        PokemonDto pokemonDto = new PokemonDto(pokemon.getId(), pokemon.getName(), pokemon.getType());
+        return pokemonDto;
+    }
+
+    private Pokemon mapToEntity(PokemonDto pokemonDto) {
+        Pokemon pokemon = new Pokemon(pokemonDto.getName(), pokemonDto.getType());
+        return pokemon;
     }
 }

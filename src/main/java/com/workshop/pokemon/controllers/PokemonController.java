@@ -1,8 +1,8 @@
 package com.workshop.pokemon.controllers;
 
-import com.workshop.pokemon.models.Pokemon;
+import com.workshop.pokemon.dto.PokemonDto;
 import com.workshop.pokemon.services.impl.PokemonServiceImpl;
-import com.workshop.pokemon.utils.ApiResponse;
+import com.workshop.pokemon.dto.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +32,13 @@ public class PokemonController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> createPokemon(@RequestBody Pokemon pokemon) {
-        return pokemonService.createPokemon(pokemon);
+    public ResponseEntity<ApiResponse> createPokemon(@RequestBody PokemonDto pokemonDto) {
+        return pokemonService.createPokemon(pokemonDto);
     }
 
     @PutMapping("/{pokemonId}")
-    public ResponseEntity<ApiResponse> updatePokemon(@PathVariable Long pokemonId, @RequestBody Pokemon pokemonDetails) {
-        return pokemonService.updatePokemon(pokemonId, pokemonDetails);
+    public ResponseEntity<ApiResponse> updatePokemon(@PathVariable Long pokemonId, @RequestBody PokemonDto pokemonDto) {
+        return pokemonService.updatePokemon(pokemonId, pokemonDto);
     }
 
     @DeleteMapping("/{pokemonId}")
