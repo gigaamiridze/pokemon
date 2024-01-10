@@ -23,12 +23,10 @@ public class Review {
 
     public Review() {}
 
-    public Review(Long id, String title, String content, int star, Pokemon pokemon) {
-        this.id = id;
+    public Review(String title, String content, int star) {
         this.title = title;
         this.content = content;
         this.star = star;
-        this.pokemon = pokemon;
     }
 
     public Long getId() {

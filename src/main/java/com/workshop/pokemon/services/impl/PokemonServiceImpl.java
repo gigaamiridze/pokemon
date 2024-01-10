@@ -70,7 +70,7 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public ResponseEntity<ApiResponse> createPokemon(PokemonDto pokemonDto) {
         try {
-            Pokemon pokemon = new Pokemon(pokemonDto.getName(), pokemonDto.getType());
+            Pokemon pokemon = mapToEntity(pokemonDto);
             Pokemon createdPokemon = pokemonRepository.save(pokemon);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
