@@ -1,6 +1,6 @@
-package com.workshop.pokemon.repositories;
+package com.workshop.pokemon.repository;
 
-import com.workshop.pokemon.models.Pokemon;
+import com.workshop.pokemon.model.Pokemon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

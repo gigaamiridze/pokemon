@@ -1,10 +1,11 @@
-package com.workshop.pokemon.services.impl;
+package com.workshop.pokemon.service.impl;
 
 import com.workshop.pokemon.dto.PokemonDto;
-import com.workshop.pokemon.exceptions.PokemonNotFoundException;
-import com.workshop.pokemon.models.Pokemon;
-import com.workshop.pokemon.repositories.PokemonRepository;
-import com.workshop.pokemon.services.PokemonService;
+import com.workshop.pokemon.exception.PokemonNotFoundException;
+import com.workshop.pokemon.mapper.PokemonMapper;
+import com.workshop.pokemon.model.Pokemon;
+import com.workshop.pokemon.repository.PokemonRepository;
+import com.workshop.pokemon.service.PokemonService;
 import com.workshop.pokemon.dto.ApiResponse;
 import com.workshop.pokemon.dto.PokemonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class PokemonServiceImpl implements PokemonService {
-
     private final PokemonRepository pokemonRepository;
+    private final PokemonMapper pokemonMapper;
 
     @Autowired
-    public PokemonServiceImpl(PokemonRepository pokemonRepository) {
+    public PokemonServiceImpl(PokemonRepository pokemonRepository, PokemonMapper pokemonMapper) {
         this.pokemonRepository = pokemonRepository;
+        this.pokemonMapper = pokemonMapper;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class PokemonServiceImpl implements PokemonService {
             Pageable pageable = PageRequest.of(pageNo, pageSize);
             Page<Pokemon> pokemons = pokemonRepository.findAll(pageable);
             List<Pokemon> listOfPokemon = pokemons.getContent();
-            List<PokemonDto> content = listOfPokemon.stream().map(p -> mapToDto(p)).collect(Collectors.toList());
+            List<PokemonDto> content = listOfPokemon.stream().map(p -> pokemonMapper.mapToDto(p)).collect(Collectors.toList());
 
             PokemonResponse pokemonResponse = new PokemonResponse();
 
@@ -70,7 +72,7 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public ResponseEntity<ApiResponse> createPokemon(PokemonDto pokemonDto) {
         try {
-            Pokemon pokemon = mapToEntity(pokemonDto);
+            Pokemon pokemon = pokemonMapper.mapToEntity(pokemonDto);
             Pokemon createdPokemon = pokemonRepository.save(pokemon);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -113,15 +115,5 @@ public class PokemonServiceImpl implements PokemonService {
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse(false, "Error deleting pokemon with id: " + pokemonId, null));
         }
-    }
-
-    private PokemonDto mapToDto(Pokemon pokemon) {
-        PokemonDto pokemonDto = new PokemonDto(pokemon.getId(), pokemon.getName(), pokemon.getType());
-        return pokemonDto;
-    }
-
-    private Pokemon mapToEntity(PokemonDto pokemonDto) {
-        Pokemon pokemon = new Pokemon(pokemonDto.getName(), pokemonDto.getType());
-        return pokemon;
     }
 }

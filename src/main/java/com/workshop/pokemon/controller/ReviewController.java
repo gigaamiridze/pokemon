@@ -1,8 +1,8 @@
-package com.workshop.pokemon.controllers;
+package com.workshop.pokemon.controller;
 
 import com.workshop.pokemon.dto.ApiResponse;
 import com.workshop.pokemon.dto.ReviewDto;
-import com.workshop.pokemon.services.impl.ReviewServiceImpl;
+import com.workshop.pokemon.service.impl.ReviewServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

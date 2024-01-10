@@ -1,7 +1,7 @@
-package com.workshop.pokemon.controllers;
+package com.workshop.pokemon.controller;
 
 import com.workshop.pokemon.dto.PokemonDto;
-import com.workshop.pokemon.services.impl.PokemonServiceImpl;
+import com.workshop.pokemon.service.impl.PokemonServiceImpl;
 import com.workshop.pokemon.dto.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.workshop.pokemon.models;
+package com.workshop.pokemon.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

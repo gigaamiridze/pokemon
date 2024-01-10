@@ -1,4 +1,4 @@
-package com.workshop.pokemon.services;
+package com.workshop.pokemon.service;
 
 import com.workshop.pokemon.dto.ApiResponse;
 import com.workshop.pokemon.dto.ReviewDto;
