@@ -18,6 +18,11 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
+    @GetMapping("/pokemon/{pokemonId}/review/{reviewId}")
+    public ResponseEntity<ApiResponse> getReviewById(@PathVariable Long pokemonId, @PathVariable Long reviewId) {
+        return reviewService.getReviewById(pokemonId, reviewId);
+    }
+
     @GetMapping("/pokemon/{pokemonId}/reviews")
     public ResponseEntity<ApiResponse> getReviewsByPokemonId(@PathVariable Long pokemonId) {
         return reviewService.getReviewsByPokemonId(pokemonId);

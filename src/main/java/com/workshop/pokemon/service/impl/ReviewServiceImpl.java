@@ -33,6 +33,39 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public ResponseEntity<ApiResponse> getReviewById(Long pokemonId, Long reviewId) {
+        try {
+            Pokemon pokemon = pokemonRepository.findById(pokemonId)
+                    .orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
+            Review review = reviewRepository.findById(reviewId)
+                    .orElseThrow(() -> new ReviewNotFoundException("Review with associated pokemon not found"));
+
+            if (!review.getPokemon().getId().equals(pokemon.getId())) {
+                throw new ReviewNotFoundException("This review does not belong to a pokemon");
+            }
+
+            return ResponseEntity.ok(new ApiResponse(true, "Review retrieved successfully", reviewMapper.mapToDto(review)));
+        } catch (ReviewNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Error retrieving review with id: " + reviewId, null));
+        }
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId) {
+        try {
+            List<Review> reviews = reviewRepository.findByPokemonId(pokemonId);
+            List<ReviewDto> reviewDtos = reviews.stream().map(review -> reviewMapper.mapToDto(review)).collect(Collectors.toList());
+            return ResponseEntity.ok(new ApiResponse(true, "Reviews retrieved successfully", reviewDtos));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Error retrieving reviews", null));
+        }
+    }
+
+    @Override
     public ResponseEntity<ApiResponse> createReview(Long pokemonId, ReviewDto reviewDto) {
         try {
             Review review = reviewMapper.mapToEntity(reviewDto);
@@ -48,19 +81,6 @@ public class ReviewServiceImpl implements ReviewService {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Error creating review", null));
-        }
-    }
-
-    @Override
-    public ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId) {
-        try {
-            List<Review> reviews = reviewRepository.findByPokemonId(pokemonId);
-            List<ReviewDto> reviewDtos = reviews.stream().map(review -> reviewMapper.mapToDto(review)).collect(Collectors.toList());
-            return ResponseEntity.ok(new ApiResponse(true, "Reviews retrieved successfully", reviewDtos));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(false, "Error retrieving reviews", null));
         }
     }
 }
