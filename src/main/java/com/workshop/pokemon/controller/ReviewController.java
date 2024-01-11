@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/review")
+@RequestMapping("/api/v1")
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
@@ -18,7 +18,12 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("/{pokemonId}")
+    @GetMapping("/pokemon/{pokemonId}/reviews")
+    public ResponseEntity<ApiResponse> getReviewsByPokemonId(@PathVariable Long pokemonId) {
+        return reviewService.getReviewsByPokemonId(pokemonId);
+    }
+
+    @PostMapping("/pokemon/{pokemonId}/review")
     public ResponseEntity<ApiResponse> createReview(@PathVariable Long pokemonId, @RequestBody ReviewDto reviewDto) {
         return reviewService.createReview(pokemonId, reviewDto);
     }

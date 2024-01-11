@@ -3,6 +3,7 @@ package com.workshop.pokemon.service.impl;
 import com.workshop.pokemon.dto.ApiResponse;
 import com.workshop.pokemon.dto.ReviewDto;
 import com.workshop.pokemon.exception.PokemonNotFoundException;
+import com.workshop.pokemon.exception.ReviewNotFoundException;
 import com.workshop.pokemon.mapper.ReviewMapper;
 import com.workshop.pokemon.model.Pokemon;
 import com.workshop.pokemon.model.Review;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -44,6 +48,19 @@ public class ReviewServiceImpl implements ReviewService {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Error creating review", null));
+        }
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId) {
+        try {
+            List<Review> reviews = reviewRepository.findByPokemonId(pokemonId);
+            List<ReviewDto> reviewDtos = reviews.stream().map(review -> reviewMapper.mapToDto(review)).collect(Collectors.toList());
+            return ResponseEntity.ok(new ApiResponse(true, "Reviews retrieved successfully", reviewDtos));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Error retrieving reviews", null));
         }
     }
 }

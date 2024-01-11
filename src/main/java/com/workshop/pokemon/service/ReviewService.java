@@ -6,4 +6,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface ReviewService {
     ResponseEntity<ApiResponse> createReview(Long pokemonId, ReviewDto reviewDto);
+    ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId);
 }
