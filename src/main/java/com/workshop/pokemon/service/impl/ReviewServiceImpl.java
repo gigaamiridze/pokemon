@@ -83,4 +83,30 @@ public class ReviewServiceImpl implements ReviewService {
                     .body(new ApiResponse(false, "Error creating review", null));
         }
     }
+
+    @Override
+    public ResponseEntity<ApiResponse> updateReview(Long pokemonId, Long reviewId, ReviewDto reviewDto) {
+        try {
+            Pokemon pokemon = pokemonRepository.findById(pokemonId)
+                    .orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
+            Review review = reviewRepository.findById(reviewId)
+                    .orElseThrow(() -> new ReviewNotFoundException("Review with associated pokemon not found"));
+
+            if (!review.getPokemon().getId().equals(pokemon.getId())) {
+                throw new ReviewNotFoundException("This review does not belong to a pokemon");
+            }
+
+            review.setTitle(reviewDto.getTitle());
+            review.setContent(reviewDto.getContent());
+            review.setStar(reviewDto.getStar());
+
+            Review updatedReview = reviewRepository.save(review);
+
+            return ResponseEntity.ok(new ApiResponse(true, "Review retrieved successfully", reviewMapper.mapToDto(updatedReview)));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Error updating pokemon", null));
+        }
+    }
 }

@@ -5,7 +5,8 @@ import com.workshop.pokemon.dto.ReviewDto;
 import org.springframework.http.ResponseEntity;
 
 public interface ReviewService {
-    ResponseEntity<ApiResponse> createReview(Long pokemonId, ReviewDto reviewDto);
-    ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId);
     ResponseEntity<ApiResponse> getReviewById(Long pokemonId, Long reviewId);
+    ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId);
+    ResponseEntity<ApiResponse> createReview(Long pokemonId, ReviewDto reviewDto);
+    ResponseEntity<ApiResponse> updateReview(Long pokemonId, Long reviewId, ReviewDto reviewDto);
 }

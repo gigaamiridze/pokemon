@@ -32,4 +32,13 @@ public class ReviewController {
     public ResponseEntity<ApiResponse> createReview(@PathVariable Long pokemonId, @RequestBody ReviewDto reviewDto) {
         return reviewService.createReview(pokemonId, reviewDto);
     }
+
+    @PutMapping("/pokemon/{pokemonId}/review/{reviewId}")
+    public ResponseEntity<ApiResponse> updateReview(
+            @PathVariable Long pokemonId,
+            @PathVariable Long reviewId,
+            @RequestBody ReviewDto reviewDto
+            ) {
+        return reviewService.updateReview(pokemonId, reviewId, reviewDto);
+    }
 }
