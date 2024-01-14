@@ -9,4 +9,5 @@ public interface ReviewService {
     ResponseEntity<ApiResponse> getReviewsByPokemonId(Long pokemonId);
     ResponseEntity<ApiResponse> createReview(Long pokemonId, ReviewDto reviewDto);
     ResponseEntity<ApiResponse> updateReview(Long pokemonId, Long reviewId, ReviewDto reviewDto);
+    ResponseEntity<ApiResponse> deleteReview(Long pokemonId, Long reviewId);
 }

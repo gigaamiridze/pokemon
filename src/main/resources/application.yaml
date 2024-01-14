@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: postgresql://localhost:5432/pokemon-api
+    url: jdbc:postgresql://localhost:5432/pokemon-api
     username: gigaamiridze
     password: gigaamiridze2003
     driver-class-name: org.postgresql.Driver
@@ -12,6 +12,5 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    database: postgresql
   profiles:
     active: dev

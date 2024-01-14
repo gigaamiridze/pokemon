@@ -18,7 +18,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/pokemon/{pokemonId}/review/{reviewId}")
+    @GetMapping("/pokemon/{pokemonId}/reviews/{reviewId}")
     public ResponseEntity<ApiResponse> getReviewById(@PathVariable Long pokemonId, @PathVariable Long reviewId) {
         return reviewService.getReviewById(pokemonId, reviewId);
     }
@@ -33,12 +33,17 @@ public class ReviewController {
         return reviewService.createReview(pokemonId, reviewDto);
     }
 
-    @PutMapping("/pokemon/{pokemonId}/review/{reviewId}")
+    @PutMapping("/pokemon/{pokemonId}/reviews/{reviewId}")
     public ResponseEntity<ApiResponse> updateReview(
             @PathVariable Long pokemonId,
             @PathVariable Long reviewId,
             @RequestBody ReviewDto reviewDto
             ) {
         return reviewService.updateReview(pokemonId, reviewId, reviewDto);
+    }
+
+    @DeleteMapping("/pokemon/{pokemonId}/reviews/{reviewId}")
+    public ResponseEntity<ApiResponse> deleteReview(@PathVariable Long pokemonId, @PathVariable Long reviewId) {
+        return reviewService.deleteReview(pokemonId, reviewId);
     }
 }

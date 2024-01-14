@@ -106,7 +106,29 @@ public class ReviewServiceImpl implements ReviewService {
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse(false, "Error updating pokemon", null));
+                    .body(new ApiResponse(false, "Error updating review", null));
+        }
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> deleteReview(Long pokemonId, Long reviewId) {
+        try {
+            Pokemon pokemon = pokemonRepository.findById(pokemonId)
+                    .orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
+            Review review = reviewRepository.findById(reviewId)
+                    .orElseThrow(() -> new ReviewNotFoundException("Review with associated pokemon not found"));
+
+            if (!review.getPokemon().getId().equals(pokemon.getId())) {
+                throw new ReviewNotFoundException("This review does not belong to a pokemon");
+            }
+
+            reviewRepository.delete(review);
+
+            return ResponseEntity.ok(new ApiResponse(true, "Review deleted successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(false, "Error deleting review", null));
         }
     }
 }
